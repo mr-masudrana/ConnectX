@@ -1,7 +1,7 @@
 # NOTE: versions below were written without a build check. If sync fails,
 # bump to the latest stable compatible versions and record it in PROGRESS.md.
 [versions]
-agp = "8.5.2"
+agp = "9.5.1"
 kotlin = "2.0.20"
 ksp = "2.0.20-1.0.25"
 hilt = "2.51.1"
