@@ -1,0 +1,27 @@
+build:
+  maxIssues: 0
+
+style:
+  MaxLineLength:
+    maxLineLength: 120
+  MagicNumber:
+    active: false
+  ReturnCount:
+    max: 3
+
+complexity:
+  LongMethod:
+    threshold: 80
+  LongParameterList:
+    functionThreshold: 8
+    constructorThreshold: 10
+    ignoreDefaultParameters: true
+
+naming:
+  FunctionNaming:
+    functionPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ignoreAnnotated: ['Composable']
+
+potential-bugs:
+  UnsafeCallOnNullableType:
+    active: true

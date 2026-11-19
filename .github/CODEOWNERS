@@ -1,0 +1,4 @@
+# Replace @YOUR-GITHUB-USERNAME with your username
+*                      @YOUR-GITHUB-USERNAME
+/app/src/main/java/com/connectx/app/crypto/   @YOUR-GITHUB-USERNAME
+/supabase/migrations/  @YOUR-GITHUB-USERNAME

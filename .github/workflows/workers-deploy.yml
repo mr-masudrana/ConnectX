@@ -1,0 +1,23 @@
+name: Deploy Cloudflare Workers
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'workers/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ hashFiles('workers/wrangler.toml') != '' || hashFiles('workers/wrangler.jsonc') != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: workers

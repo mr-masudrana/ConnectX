@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  android:
+    name: Lint, test, build
+    runs-on: ubuntu-latest
+    # Skips until Step 0 creates the Gradle project
+    if: ${{ hashFiles('gradlew') != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: ktlint and detekt
+        run: ./gradlew ktlintCheck detekt
+
+      - name: Unit tests
+        run: ./gradlew testDebugUnitTest
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: connectx-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          retention-days: 7
+
+  no-secrets:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
