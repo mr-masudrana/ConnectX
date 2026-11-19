@@ -1,0 +1,33 @@
+name: DB check
+
+on:
+  pull_request:
+    paths:
+      - 'supabase/**'
+      - '.github/workflows/db-check.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'supabase/**'
+
+concurrency:
+  group: db-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  db:
+    name: Database check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      # Starts a local Supabase and applies every migration (SQL errors fail here)
+      - name: Start local Supabase
+        run: supabase start
+
+      - name: Run database tests (pgTAP)
+        run: supabase test db

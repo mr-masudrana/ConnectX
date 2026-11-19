@@ -1,0 +1,46 @@
+name: Apply patch zip
+
+# One-time helper for working from a phone:
+# 1) Upload patch.zip to the repo root (Add file > Upload files, commit to main)
+# 2) Actions > Apply patch zip > Run workflow, give a new branch name
+# 3) Open a PR from that branch.
+# The zip must NOT contain .github/workflows files (GitHub blocks that); add those by hand.
+on:
+  workflow_dispatch:
+    inputs:
+      zip_path:
+        description: Path of the zip inside the repo
+        default: patch.zip
+        required: true
+      branch:
+        description: New branch name (e.g. step-2-db-schema)
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unzip, commit to a new branch
+        env:
+          ZIP_PATH: ${{ inputs.zip_path }}
+          BRANCH: ${{ inputs.branch }}
+        run: |
+          set -e
+          test -f "$ZIP_PATH" || { echo "::error::$ZIP_PATH not found"; exit 1; }
+          if unzip -l "$ZIP_PATH" | grep -q '\.github/workflows/'; then
+            echo "::error::zip contains workflow files; add those manually"
+            exit 1
+          fi
+          unzip -o "$ZIP_PATH"
+          rm "$ZIP_PATH"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add -A
+          git commit -m "chore: apply patch $BRANCH"
+          git push origin "$BRANCH"
