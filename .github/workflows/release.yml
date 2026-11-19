@@ -8,18 +8,30 @@ jobs:
   release:
     name: Signed AAB
     runs-on: ubuntu-latest
-    if: ${{ hashFiles('gradlew') != '' }}
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check Gradle project exists
+        id: gate
+        run: |
+          if [ -f gradlew ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "No gradlew yet, skipping release"
+          fi
+
       - uses: actions/setup-java@v4
+        if: steps.gate.outputs.ready == 'true'
         with:
           distribution: temurin
           java-version: 17
 
       - uses: gradle/actions/setup-gradle@v4
+        if: steps.gate.outputs.ready == 'true'
 
       - name: Restore keystore and google-services
+        if: steps.gate.outputs.ready == 'true'
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
           GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
@@ -28,6 +40,7 @@ jobs:
           echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 -d > app/google-services.json
 
       - name: Build signed bundle
+        if: steps.gate.outputs.ready == 'true'
         env:
           KEYSTORE_PATH: ${{ runner.temp }}/release.keystore
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -40,6 +53,7 @@ jobs:
           ./gradlew bundleRelease
 
       - uses: actions/upload-artifact@v4
+        if: steps.gate.outputs.ready == 'true'
         with:
           name: connectx-release-aab
           path: app/build/outputs/bundle/release/*.aab

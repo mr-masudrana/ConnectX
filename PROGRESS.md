@@ -35,6 +35,8 @@ Phase 3: groups (Sender Keys), calls (WebRTC), encrypted backup, multi-device, d
 - Then start Step 1 (CI/CD): release signing in `app/build.gradle.kts` must read `KEYSTORE_PATH`, `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD` from env.
 
 ## Known issues
+- Fixed: workflows used `hashFiles()` in job-level `if` (invalid) which made every run fail. Gates now use a first step writing `ready=true/false`.
+- Do NOT merge Dependabot's AGP 9.x bump until Gradle/Kotlin plugin migration is done deliberately.
 - `gradle-wrapper.jar` and `gradlew` are missing (cannot be generated without Gradle installed). CI skips until `gradlew` exists.
 - Versions in `libs.versions.toml` are unverified; bump if sync fails.
 

@@ -17,12 +17,35 @@ jobs:
       SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Check secrets and migrations exist
+        id: gate
+        run: |
+          if [ -z "$SUPABASE_ACCESS_TOKEN" ] || [ -z "$SUPABASE_DB_PASSWORD" ] || [ -z "$SUPABASE_PROJECT_ID" ]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "Supabase secrets not set, skipping deploy"
+          elif [ -z "$(ls supabase/migrations/*.sql 2>/dev/null)" ]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "No migrations yet, skipping deploy"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: supabase/setup-cli@v1
+        if: steps.gate.outputs.ready == 'true'
         with:
           version: latest
-      - run: supabase link --project-ref "$SUPABASE_PROJECT_ID"
-      - run: supabase db push
+
+      - name: Link project
+        if: steps.gate.outputs.ready == 'true'
+        run: supabase link --project-ref "$SUPABASE_PROJECT_ID"
+
+      - name: Push migrations
+        if: steps.gate.outputs.ready == 'true'
+        run: supabase db push
+
       - name: Deploy edge functions
+        if: steps.gate.outputs.ready == 'true'
         run: |
           if [ -d supabase/functions ] && [ "$(ls -A supabase/functions)" ]; then
             supabase functions deploy

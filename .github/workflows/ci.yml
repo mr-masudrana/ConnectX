@@ -13,31 +13,44 @@ jobs:
   android:
     name: Lint, test, build
     runs-on: ubuntu-latest
-    # Skips until Step 0 creates the Gradle project
-    if: ${{ hashFiles('gradlew') != '' }}
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check Gradle project exists
+        id: gate
+        run: |
+          if [ -f gradlew ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "No gradlew yet, skipping Android steps"
+          fi
+
       - uses: actions/setup-java@v4
+        if: steps.gate.outputs.ready == 'true'
         with:
           distribution: temurin
           java-version: 17
 
       - uses: gradle/actions/setup-gradle@v4
-
-      - name: Make gradlew executable
-        run: chmod +x gradlew
+        if: steps.gate.outputs.ready == 'true'
 
       - name: ktlint and detekt
-        run: ./gradlew ktlintCheck detekt
+        if: steps.gate.outputs.ready == 'true'
+        run: |
+          chmod +x gradlew
+          ./gradlew ktlintCheck detekt
 
       - name: Unit tests
+        if: steps.gate.outputs.ready == 'true'
         run: ./gradlew testDebugUnitTest
 
       - name: Build debug APK
+        if: steps.gate.outputs.ready == 'true'
         run: ./gradlew assembleDebug
 
       - uses: actions/upload-artifact@v4
+        if: steps.gate.outputs.ready == 'true'
         with:
           name: connectx-debug-apk
           path: app/build/outputs/apk/debug/*.apk
