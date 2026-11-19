@@ -1,0 +1,6 @@
+project_id = "connectx"
+
+[db]
+port = 54322
+# Match the Postgres version of your hosted Supabase project (Settings > Infrastructure)
+major_version = 17
