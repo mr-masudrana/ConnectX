@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.ktlint)
 }
 
+val releaseKeystorePath: String? = System.getenv("KEYSTORE_PATH")
+
 android {
     namespace = "com.connectx.app"
     compileSdk = 34
@@ -20,6 +22,19 @@ android {
         versionName = "0.1.0"
     }
 
+    // Release signing is only configured when CI provides the KEYSTORE_* env vars.
+    // Without them, release builds stay unsigned and debug builds are unaffected.
+    if (releaseKeystorePath != null) {
+        signingConfigs {
+            create("release") {
+                storeFile = file(releaseKeystorePath)
+                storePassword = System.getenv("KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("KEY_ALIAS")
+                keyPassword = System.getenv("KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -28,7 +43,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            // Release signing is wired in Step 1 (reads KEYSTORE_* env vars)
+            if (releaseKeystorePath != null) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
 
