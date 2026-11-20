@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ConnectX</string>
-    <string name="hello_connectx">ConnectX-এ স্বাগতম</string>
+
+    <string name="login_title">ConnectX-এ প্রবেশ করুন</string>
+    <string name="email_label">ইমেইল</string>
+    <string name="send_code">কোড পাঠান</string>
+    <string name="code_sent_to">%1$s-এ একটি কোড পাঠানো হয়েছে</string>
+    <string name="code_label">কোড</string>
+    <string name="verify">যাচাই করুন</string>
+    <string name="change_email">অন্য ইমেইল ব্যবহার করুন</string>
+    <string name="error_invalid_email">সঠিক ইমেইল ঠিকানা দিন</string>
+    <string name="error_invalid_code">ইমেইলে পাওয়া কোডটি দিন</string>
+    <string name="error_send_failed">কোড পাঠানো যায়নি। ইন্টারনেট দেখে আবার চেষ্টা করুন</string>
+    <string name="error_verify_failed">কোডটি ভুল অথবা মেয়াদ শেষ</string>
+
+    <string name="profile_title">প্রোফাইল সেট করুন</string>
+    <string name="display_name_label">নাম</string>
+    <string name="username_label">ইউজারনেম</string>
+    <string name="username_hint">৫ থেকে ৩২ অক্ষর: a-z, 0-9 ও _</string>
+    <string name="continue_label">চালিয়ে যান</string>
+    <string name="error_invalid_name">আপনার নাম দিন</string>
+    <string name="error_invalid_username">ইউজারনেম ৫ থেকে ৩২ অক্ষরের হবে, অক্ষর দিয়ে শুরু হবে এবং শুধু a-z, 0-9 ও _ থাকবে</string>
+    <string name="error_username_taken">এই ইউজারনেম আগেই নেওয়া হয়েছে</string>
+    <string name="error_username_reserved">এই ইউজারনেম ব্যবহার করা যাবে না</string>
+    <string name="error_save_failed">সংরক্ষণ করা যায়নি। ইন্টারনেট দেখে আবার চেষ্টা করুন</string>
+
+    <string name="welcome_user">স্বাগতম, @%1$s</string>
+    <string name="chats_placeholder">আপনার চ্যাট এখানে দেখা যাবে</string>
+    <string name="sign_out">সাইন আউট</string>
+    <string name="profile_load_failed">প্রোফাইল লোড করা যায়নি</string>
+    <string name="retry">আবার চেষ্টা করুন</string>
 </resources>
