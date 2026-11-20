@@ -14,7 +14,7 @@ Read this file and `PROGRESS.md` before doing anything. Continue from "Current s
 - Architecture: MVVM, Hilt (DI), Coroutines + Flow, single-activity, Navigation Compose
 - Local DB: Room + SQLCipher (encrypted)
 - Background/retry: WorkManager
-- Backend: Supabase (Auth, Postgres, Realtime, pg_cron) via `supabase-kt` + Ktor
+- Backend: Supabase (Auth, Postgres, Realtime, pg_cron) via `supabase-kt` (BOM) + Ktor OkHttp engine + kotlinx.serialization
 - Media storage (Phase 2): Cloudflare R2 via Cloudflare Workers (signed URLs)
 - Push: Firebase Cloud Messaging ONLY (no Firebase Auth/Firestore)
 - E2EE: official `libsignal` (Signal Protocol). Never write custom crypto.
@@ -33,13 +33,14 @@ app/src/main/java/com/connectx/app/
     repository/
   domain/
     model/
+    repository/    # AuthRepository, ProfileRepository interfaces
     transport/     # MessageTransport interface
     crypto/        # CryptoEngine interface
   crypto/          # libsignal implementation
   transport/       # SupabaseRealtimeTransport
   feature/
     auth/  profile/  username/  chat/  settings/  safety/
-  ui/theme/
+  ui/              # AppRoot, shared components, theme
 supabase/
   migrations/      # SQL, numbered: 0001_xxx.sql
   functions/
