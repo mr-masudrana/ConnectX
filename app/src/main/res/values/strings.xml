@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ConnectX</string>
-    <string name="hello_connectx">Hello ConnectX</string>
+
+    <string name="login_title">Sign in to ConnectX</string>
+    <string name="email_label">Email</string>
+    <string name="send_code">Send code</string>
+    <string name="code_sent_to">We sent a code to %1$s</string>
+    <string name="code_label">Code</string>
+    <string name="verify">Verify</string>
+    <string name="change_email">Use a different email</string>
+    <string name="error_invalid_email">Enter a valid email address</string>
+    <string name="error_invalid_code">Enter the code from your email</string>
+    <string name="error_send_failed">Could not send the code. Check your connection and try again</string>
+    <string name="error_verify_failed">The code is wrong or expired</string>
+
+    <string name="profile_title">Set up your profile</string>
+    <string name="display_name_label">Name</string>
+    <string name="username_label">Username</string>
+    <string name="username_hint">5 to 32 characters: a-z, 0-9 and _</string>
+    <string name="continue_label">Continue</string>
+    <string name="error_invalid_name">Enter your name</string>
+    <string name="error_invalid_username">Username must be 5 to 32 characters, start with a letter, use only a-z, 0-9 and _</string>
+    <string name="error_username_taken">This username is already taken</string>
+    <string name="error_username_reserved">This username is not available</string>
+    <string name="error_save_failed">Could not save. Check your connection and try again</string>
+
+    <string name="welcome_user">Welcome, @%1$s</string>
+    <string name="chats_placeholder">Your chats will appear here</string>
+    <string name="sign_out">Sign out</string>
+    <string name="profile_load_failed">Could not load your profile</string>
+    <string name="retry">Retry</string>
 </resources>
